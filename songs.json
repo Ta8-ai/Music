@@ -6,27 +6,52 @@
     },
     {
         "title": "Crush",
-        "artist": "Unknown Artist",
+        "artist": "Marino",
         "mp3": "songs/Crush.mp3"
     },
     {
         "title": "Da Da Da - 甜妹版",
-        "artist": "Unknown Artist",
+        "artist": "甜妹版",
         "mp3": "songs/Da Da Da - 甜妹版.mp3"
     },
     {
         "title": "the cutest pair",
-        "artist": "Unknown Artist",
+        "artist": "Regina",
         "mp3": "songs/the cutest pair.mp3"
     },
     {
         "title": "Hello?",
-        "artist": "Unknown Artist",
+        "artist": "Clairo",
         "mp3": "songs/Hello.mp3"
     },
     {
         "title": "I Like The Way",
         "artist": "Ray Bee",
         "mp3": "songs/i like the way.mp3"
+    },
+    {
+        "title": "Losing Sleep Over You",
+        "artist": "Punch",
+        "mp3": "songs/Losing Sleep Over You.mp3"
+    },
+    {
+        "title": "Where Is Love?",
+        "artist": "Kodi Greene",
+        "mp3": "songs/WHERE IS LOVE.mp3"
+    },
+    {
+        "title": "Wrongful Meeting",
+        "artist": "KimKunMo",
+        "mp3": "songs/Wrongful Meeting.mp3"
+    },
+    {
+        "title": "돌아와줘 내 곁으로",
+        "artist": "KimJuneBum",
+        "mp3": "songs/돌아와줘 내 곁으로.mp3"
+    },
+    {
+        "title": "워아이니",
+        "artist": "KimBuneHong",
+        "mp3": "songs/워아이니.mp3"
     }
 ]
