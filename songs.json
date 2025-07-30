@@ -23,5 +23,10 @@
         "title": "Hello?",
         "artist": "Unknown Artist",
         "mp3": "songs/Hello.mp3"
+    },
+    {
+        "title": "I Like The Way",
+        "artist": "Ray Bee",
+        "mp3": "songs/i like the way.mp3"
     }
 ]
