@@ -1,358 +1,156 @@
-Got it\! Here's the complete, updated HTML and JavaScript code, incorporating the improvements we discussed for visually connecting the playing song with the list, and setting up the foundation for other features.
-
-**index.html**
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Player</title>
+    <title>Simple Music Player</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
         body {
-            background-color: #121212;
+            font-family: sans-serif;
+            background-color: #222;
             color: white;
-            height: 100vh;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
         }
-        
         .player-container {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
-        
-        .main-content {
-            flex: 1;
+            background-color: #333;
             padding: 20px;
-            overflow-y: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
         }
-        
-        .player-bar {
-            background-color: #181818;
-            border-top: 1px solid #282828;
-            padding: 10px 20px;
+        h1 {
+            margin-bottom: 20px;
+            color: #1db954;
+        }
+        .song-info {
+            margin-bottom: 20px;
+        }
+        #now-playing-title {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        #now-playing-artist {
+            font-size: 0.9em;
+            color: #bbb;
+        }
+        .controls button {
+            background-color: #1db954;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5em;
+            margin: 0 10px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+        .controls button:hover {
+            background-color: #1ed760;
+            transform: scale(1.05);
+        }
+        .controls button:active {
+            transform: scale(0.95);
+        }
+        .controls button.small {
+            width: 40px;
+            height: 40px;
+            font-size: 1.2em;
+            background-color: #555;
+        }
+        .controls button.small:hover {
+            background-color: #777;
+        }
+        .song-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+            border-top: 1px solid #444;
+            padding-top: 10px;
+        }
+        .song-list li {
+            padding: 8px 0;
+            cursor: pointer;
+            transition: background-color 0.2s;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        
-        .song-info {
-            display: flex;
-            align-items: center;
-            width: 25%;
+        .song-list li:hover {
+            background-color: #444;
         }
-        
-        .song-details {
-            margin-left: 10px;
-        }
-        
-        .song-details span {
-            display: block;
-        }
-        
-        #now-playing-title {
-            font-size: 14px;
-        }
-        
-        #now-playing-artist {
-            font-size: 12px;
-            color: #b3b3b3;
-        }
-        
-        .player-controls {
-            width: 50%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        .main-controls {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        
-        .main-controls button {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 16px;
-            margin: 0 10px;
-            cursor: pointer;
-            transition: color 0.2s ease-in-out; /* Smooth transition for icon color */
-        }
-        
-        .main-controls button:hover {
-            color: #1db954; /* Highlight on hover */
-        }
-
-        #play-btn {
-            background-color: white;
-            color: black;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px; /* Slightly larger play/pause icon */
-        }
-        
-        #play-btn:hover {
-            transform: scale(1.05); /* Subtle hover effect */
-        }
-
-        .progress-container {
-            width: 100%;
-            display: flex;
-            align-items: center;
-        }
-        
-        .progress-bar {
-            flex: 1;
-            height: 4px;
-            background-color: #535353;
-            margin: 0 10px;
-            border-radius: 2px;
-            cursor: pointer;
-            position: relative; /* For the draggable thumb if added later */
-        }
-        
-        .progress {
-            height: 100%;
-            background-color: #1db954;
-            border-radius: 2px;
-            width: 0%;
-        }
-        
-        .volume-controls {
-            width: 25%;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-        }
-        
-        .volume-controls button {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            transition: color 0.2s ease-in-out;
-        }
-
-        .volume-controls button:hover {
+        .song-list li.active {
             color: #1db954;
+            font-weight: bold;
         }
-
-        .volume-bar {
-            width: 100px;
-            height: 4px;
-            background-color: #535353;
+        .song-list .play-icon {
+            font-size: 0.8em;
             margin-left: 10px;
-            border-radius: 2px;
-            cursor: pointer;
-            position: relative; /* For the draggable thumb if added later */
+            color: #888;
+            visibility: hidden; /* Hidden by default */
         }
-        
-        .volume-progress {
-            height: 100%;
-            background-color: #1db954;
-            border-radius: 2px;
-            width: 100%; /* Initial width for full volume */
-        }
-        
-        .songs-list {
-            margin-top: 20px;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #282828;
-            color: white; /* Ensure text is white by default */
-        }
-        
-        th {
-            color: #b3b3b3;
-            font-size: 14px;
-            font-weight: 400;
-            text-transform: uppercase; /* Common for table headers */
-        }
-        
-        tr:hover {
-            background-color: #282828;
-            cursor: pointer; /* Indicate rows are clickable */
-        }
-        
-        .play-btn-cell {
-            width: 40px;
-            text-align: center; /* Center the play button */
-        }
-        
-        .play-btn-cell button {
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-            opacity: 0; /* Hidden by default */
-            font-size: 18px; /* Size for play icon in table */
-            transition: opacity 0.2s ease-in-out;
-        }
-        
-        tr:hover .play-btn-cell button {
-            opacity: 1; /* Visible on row hover */
-        }
-        
-        /* Style for the currently playing song row */
-        .active-song {
-            color: #1db954; /* Green color to indicate active song */
-            font-weight: bold; /* Make text bold */
-        }
-        /* Specific styling for cells within the active row to ensure color inheritance */
-        .active-song td {
-            color: #1db954;
-        }
-        .active-song .play-btn-cell button {
-            color: #1db954; /* Ensure play button is also green */
-            opacity: 1; /* Always visible for active song */
+        .song-list li:hover .play-icon,
+        .song-list li.active .play-icon {
+            visibility: visible; /* Visible on hover or when active */
         }
     </style>
 </head>
 <body>
     <div class="player-container">
-        <div class="main-content">
-            <h1>Your Music</h1>
-            <div class="songs-list">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th class="play-btn-cell"></th> <th>TITLE</th>
-                            <th>ARTIST</th>
-                            <th><i class="far fa-clock"></i></th>
-                        </tr>
-                    </thead>
-                    <tbody id="songs-table-body">
-                        </tbody>
-                </table>
-            </div>
+        <h1>My Simple Music Player</h1>
+        
+        <div class="song-info">
+            <div id="now-playing-title">No song selected</div>
+            <div id="now-playing-artist">-</div>
         </div>
 
-        <div class="player-bar">
-            <div class="song-info">
-                <div class="song-details">
-                    <span id="now-playing-title">No song selected</span>
-                    <span id="now-playing-artist">-</span>
-                </div>
-            </div>
-
-            <div class="player-controls">
-                <div class="main-controls">
-                    <button id="shuffle-btn"><i class="fas fa-random"></i></button>
-                    <button id="prev-btn"><i class="fas fa-step-backward"></i></button>
-                    <button id="play-btn"><i class="fas fa-play"></i></button>
-                    <button id="next-btn"><i class="fas fa-step-forward"></i></button>
-                    <button id="repeat-btn"><i class="fas fa-redo"></i></button>
-                </div>
-                <div class="progress-container">
-                    <span id="current-time">0:00</span>
-                    <div class="progress-bar">
-                        <div class="progress" id="progress"></div>
-                    </div>
-                    <span id="duration">0:00</span>
-                </div>
-            </div>
-
-            <div class="volume-controls">
-                <button id="volume-btn"><i class="fas fa-volume-up"></i></button>
-                <div class="volume-bar">
-                    <div class="volume-progress" id="volume-progress"></div>
-                </div>
-            </div>
-
-            <audio id="audio-element"></audio>
+        <div class="controls">
+            <button id="prev-btn" class="small"><i class="fas fa-step-backward"></i></button>
+            <button id="play-pause-btn"><i class="fas fa-play"></i></button>
+            <button id="next-btn" class="small"><i class="fas fa-step-forward"></i></button>
         </div>
+
+        <ul class="song-list" id="song-list">
+            <!-- Songs will be populated here -->
+        </ul>
+
+        <audio id="audio-element"></audio>
     </div>
 
     <script>
-        // Sample music data - durations will be updated dynamically
+        // Sample music data (ensure these paths are correct relative to your HTML file)
         const songs = [
-            {
-                title: "Prince of the sea",
-                artist: "Unknown Artist",
-                mp3: "songs/Prince of the sea.mp3",
-                duration: "0:00" // Will be updated
-            },
-            {
-                title: "Crush",
-                artist: "Unknown Artist",
-                mp3: "songs/Crush.mp3",
-                duration: "0:00" // Will be updated
-            },
-            {
-                title: "Da Da Da - 甜妹版",
-                artist: "Unknown Artist",
-                mp3: "songs/Da Da Da - 甜妹版.mp3",
-                duration: "0:00" // Will be updated
-            },
-            {
-                title: "the cutest pair",
-                artist: "Unknown Artist",
-                mp3: "songs/the cutest pair.mp3",
-                duration: "0:00" // Will be updated
-            },
-            {
-                title: "워아이니",
-                artist: "Unknown Artist",
-                mp3: "songs/워아이니.mp3",
-                duration: "0:00" // Will be updated
-            }
+            { title: "Prince of the sea", artist: "Unknown Artist", mp3: "songs/Prince of the sea.mp3" },
+            { title: "Crush", artist: "Unknown Artist", mp3: "songs/Crush.mp3" },
+            { title: "Da Da Da - 甜妹版", artist: "Unknown Artist", mp3: "songs/Da Da Da - 甜妹版.mp3" },
+            { title: "the cutest pair", artist: "Unknown Artist", mp3: "songs/the cutest pair.mp3" },
+            { title: "워아이니", artist: "Unknown Artist", mp3: "songs/워아이니.mp3" }
         ];
 
         // DOM elements
         const audio = document.getElementById('audio-element');
-        const playBtn = document.getElementById('play-btn');
+        const playPauseBtn = document.getElementById('play-pause-btn');
         const prevBtn = document.getElementById('prev-btn');
         const nextBtn = document.getElementById('next-btn');
-        const progress = document.getElementById('progress');
-        const progressBar = document.querySelector('.progress-bar');
-        const currentTimeEl = document.getElementById('current-time');
-        const durationEl = document.getElementById('duration');
-        const volumeProgress = document.getElementById('volume-progress');
-        const volumeBar = document.querySelector('.volume-bar');
-        const volumeBtn = document.getElementById('volume-btn');
-        const songsTableBody = document.getElementById('songs-table-body');
         const nowPlayingTitle = document.getElementById('now-playing-title');
         const nowPlayingArtist = document.getElementById('now-playing-artist');
-        const shuffleBtn = document.getElementById('shuffle-btn');
-        const repeatBtn = document.getElementById('repeat-btn');
+        const songListElement = document.getElementById('song-list');
 
         // State
         let isPlaying = false;
         let currentSongIndex = 0;
-        let originalVolume = audio.volume; // Store original volume for mute toggle
-        let isMuted = false;
-        let isShuffling = false;
-        let repeatMode = 'none'; // 'none', 'all', 'one'
 
-        // Helper function to format time
+        // Function to format time (still useful for debugging/future expansion)
         function formatTime(seconds) {
             const minutes = Math.floor(seconds / 60);
             let secs = Math.floor(seconds % 60);
@@ -362,81 +160,20 @@ Got it\! Here's the complete, updated HTML and JavaScript code, incorporating th
             return `${minutes}:${secs}`;
         }
 
-        // Initialize player
-        function initPlayer() {
-            renderSongsList();
-            loadSong(currentSongIndex);
-            
-            // Set initial volume from localStorage or default
-            const savedVolume = localStorage.getItem('musicPlayerVolume');
-            if (savedVolume !== null) {
-                audio.volume = parseFloat(savedVolume);
-                volumeProgress.style.width = `${audio.volume * 100}%`;
-                updateVolumeIcon();
-            } else {
-                audio.volume = 1; // Default to full volume
-                volumeProgress.style.width = '100%';
-            }
-
-            // Event listeners
-            playBtn.addEventListener('click', togglePlay);
-            prevBtn.addEventListener('click', prevSong);
-            nextBtn.addEventListener('click', nextSong);
-            audio.addEventListener('timeupdate', updateProgress);
-            audio.addEventListener('ended', handleSongEnd); // Use a dedicated handler for ending
-            progressBar.addEventListener('click', setProgress);
-            volumeBar.addEventListener('click', setVolume);
-            volumeBtn.addEventListener('click', toggleMute);
-            shuffleBtn.addEventListener('click', toggleShuffle);
-            repeatBtn.addEventListener('click', toggleRepeat);
-
-            // Add listener for when song metadata is loaded to get actual duration
-            audio.addEventListener('loadedmetadata', () => {
-                const duration = audio.duration;
-                // Update the duration for the current song in the `songs` array
-                songs[currentSongIndex].duration = formatTime(duration);
-                // Update the duration display in the player bar
-                durationEl.textContent = formatTime(duration);
-                // Re-render the list to show updated duration (optional, but good for accuracy)
-                // renderSongsList(); // This might cause a flicker, only do if necessary for initial load
-                updateSongRowDuration(currentSongIndex, formatTime(duration));
-            });
-        }
-
         // Render songs list
         function renderSongsList() {
-            songsTableBody.innerHTML = ''; // Clear previous entries
-            
+            songListElement.innerHTML = ''; // Clear existing list
             songs.forEach((song, index) => {
-                const tr = document.createElement('tr');
-                tr.setAttribute('data-index', index); // Add data attribute for easy access
-
-                tr.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td class="play-btn-cell">
-                        <button class="play-song-button" data-index="${index}">
-                            <i class="fas fa-play"></i>
-                        </button>
-                    </td>
-                    <td>${song.title}</td>
-                    <td>${song.artist}</td>
-                    <td class="song-duration">${song.duration}</td>
-                `;
+                const listItem = document.createElement('li');
+                listItem.textContent = `${index + 1}. ${song.title} - ${song.artist}`;
+                listItem.setAttribute('data-index', index); // Store index for easy access
                 
-                // Event listener for clicking the entire row
-                tr.addEventListener('click', (event) => {
-                    // Prevent playing twice if clicking the button specifically
-                    if (!event.target.closest('.play-song-button')) {
-                        currentSongIndex = index;
-                        loadSong(currentSongIndex);
-                        playSong();
-                    }
-                });
+                // Add a play icon that appears on hover/active
+                const playIcon = document.createElement('i');
+                playIcon.classList.add('fas', 'fa-play', 'play-icon');
+                listItem.appendChild(playIcon);
 
-                // Event listener for the specific play button in the row
-                const rowPlayButton = tr.querySelector('.play-song-button');
-                rowPlayButton.addEventListener('click', (event) => {
-                    event.stopPropagation(); // Prevent the row click listener from firing
+                listItem.addEventListener('click', () => {
                     if (currentSongIndex === index && isPlaying) {
                         pauseSong();
                     } else {
@@ -445,54 +182,42 @@ Got it\! Here's the complete, updated HTML and JavaScript code, incorporating th
                         playSong();
                     }
                 });
-                
-                songsTableBody.appendChild(tr);
+                songListElement.appendChild(listItem);
             });
+            updateActiveSongInList(); // Call initially to highlight first song
         }
 
-        // Update a specific song row's duration (used after loadedmetadata)
-        function updateSongRowDuration(index, formattedDuration) {
-            const row = songsTableBody.querySelector(`tr[data-index="${index}"]`);
-            if (row) {
-                row.querySelector('.song-duration').textContent = formattedDuration;
-            }
-        }
-
-        // Load song
+        // Load song into the audio element and update display
         function loadSong(index) {
             const song = songs[index];
             audio.src = song.mp3;
             nowPlayingTitle.textContent = song.title;
             nowPlayingArtist.textContent = song.artist;
-            
-            // Set initial duration to 0:00 until loadedmetadata fires
-            currentTimeEl.textContent = '0:00';
-            durationEl.textContent = '0:00';
-            progress.style.width = '0%';
-
-            updateActiveSongInList(index);
+            updateActiveSongInList(); // Update highlight and row icon
         }
 
-        // Update active row in table
-        function updateActiveSongInList(index) {
-            const rows = document.querySelectorAll('#songs-table-body tr');
-            const playButtons = document.querySelectorAll('.play-song-button');
-
-            rows.forEach((row, i) => {
-                row.classList.remove('active-song');
-                if (playButtons[i]) {
-                    playButtons[i].innerHTML = '<i class="fas fa-play"></i>'; // Reset all to play icon
+        // Update active song highlight in the list
+        function updateActiveSongInList() {
+            const listItems = songListElement.querySelectorAll('li');
+            listItems.forEach((item, index) => {
+                item.classList.remove('active');
+                const icon = item.querySelector('.play-icon');
+                if (icon) {
+                    icon.classList.remove('fa-pause');
+                    icon.classList.add('fa-play');
                 }
             });
 
-            if (rows[index]) {
-                rows[index].classList.add('active-song');
-                if (playButtons[index]) {
-                    // If the active song is playing, show pause icon in its row
+            if (listItems[currentSongIndex]) {
+                listItems[currentSongIndex].classList.add('active');
+                const icon = listItems[currentSongIndex].querySelector('.play-icon');
+                if (icon) {
                     if (isPlaying) {
-                        playButtons[index].innerHTML = '<i class="fas fa-pause"></i>';
+                        icon.classList.remove('fa-play');
+                        icon.classList.add('fa-pause');
                     } else {
-                        playButtons[index].innerHTML = '<i class="fas fa-play"></i>';
+                        icon.classList.remove('fa-pause');
+                        icon.classList.add('fa-play');
                     }
                 }
             }
@@ -501,17 +226,22 @@ Got it\! Here's the complete, updated HTML and JavaScript code, incorporating th
         // Play song
         function playSong() {
             isPlaying = true;
-            playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-            audio.play();
-            updateActiveSongInList(currentSongIndex); // Update play/pause icon in active row
+            playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            audio.play().catch(error => {
+                console.error("Autoplay prevented or other play error:", error);
+                // Inform user if autoplay was blocked
+                nowPlayingTitle.textContent = "Click play to start!";
+                nowPlayingArtist.textContent = "Browser blocked autoplay";
+            });
+            updateActiveSongInList();
         }
 
         // Pause song
         function pauseSong() {
             isPlaying = false;
-            playBtn.innerHTML = '<i class="fas fa-play"></i>';
+            playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
             audio.pause();
-            updateActiveSongInList(currentSongIndex); // Update play/pause icon in active row
+            updateActiveSongInList();
         }
 
         // Toggle play/pause
@@ -527,7 +257,7 @@ Got it\! Here's the complete, updated HTML and JavaScript code, incorporating th
         function prevSong() {
             currentSongIndex--;
             if (currentSongIndex < 0) {
-                currentSongIndex = songs.length - 1;
+                currentSongIndex = songs.length - 1; // Loop to end
             }
             loadSong(currentSongIndex);
             playSong();
@@ -536,127 +266,26 @@ Got it\! Here's the complete, updated HTML and JavaScript code, incorporating th
         // Next song
         function nextSong() {
             currentSongIndex++;
-            if (currentSongIndex > songs.length - 1) {
-                currentSongIndex = 0;
+            if (currentSongIndex >= songs.length) {
+                currentSongIndex = 0; // Loop to beginning
             }
             loadSong(currentSongIndex);
             playSong();
         }
 
-        // Handle song ending based on repeat mode
-        function handleSongEnd() {
-            if (repeatMode === 'one') {
-                audio.currentTime = 0; // Rewind to start
-                playSong();
-            } else if (repeatMode === 'all' || isShuffling) { // Loop entire playlist or if shuffling
-                nextSong();
-            } else { // No repeat, stop at end of playlist
-                pauseSong();
-                currentSongIndex = 0; // Reset to first song when playlist ends
-                loadSong(currentSongIndex);
-            }
-        }
+        // Handle song ending
+        audio.addEventListener('ended', nextSong);
 
-        // Update progress bar
-        function updateProgress(e) {
-            const { duration, currentTime } = e.srcElement;
-            const progressPercent = (currentTime / duration) * 100;
-            progress.style.width = `${progressPercent}%`;
-            
-            // Update time display
-            currentTimeEl.textContent = formatTime(currentTime);
-            // Only update total duration once it's available and if not already set by loadedmetadata
-            if (!isNaN(duration) && duration > 0 && durationEl.textContent === '0:00') {
-                durationEl.textContent = formatTime(duration);
-                // Also update the song object itself for consistency
-                songs[currentSongIndex].duration = formatTime(duration);
-                updateSongRowDuration(currentSongIndex, formatTime(duration));
-            }
-        }
+        // Event listeners for main controls
+        playPauseBtn.addEventListener('click', togglePlay);
+        prevBtn.addEventListener('click', prevSong);
+        nextBtn.addEventListener('click', nextSong);
 
-        // Set progress by clicking on the progress bar
-        function setProgress(e) {
-            const width = this.clientWidth; // Total width of the progress bar
-            const clickX = e.offsetX; // X-coordinate of the click relative to the element
-            const duration = audio.duration;
-            audio.currentTime = (clickX / width) * duration;
-        }
-
-        // Set volume by clicking on the volume bar
-        function setVolume(e) {
-            const width = this.clientWidth;
-            const clickX = e.offsetX;
-            let volume = clickX / width;
-            volume = Math.max(0, Math.min(1, volume)); // Clamp between 0 and 1
-            audio.volume = volume;
-            volumeProgress.style.width = `${volume * 100}%`;
-            localStorage.setItem('musicPlayerVolume', volume); // Save volume
-            updateVolumeIcon();
-            isMuted = false; // Unmute if volume is adjusted
-        }
-
-        // Update volume icon based on current volume level
-        function updateVolumeIcon() {
-            if (audio.volume === 0 || isMuted) {
-                volumeBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
-            } else if (audio.volume < 0.5) {
-                volumeBtn.innerHTML = '<i class="fas fa-volume-down"></i>';
-            } else {
-                volumeBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-            }
-        }
-
-        // Toggle mute
-        function toggleMute() {
-            if (isMuted) {
-                audio.volume = originalVolume; // Restore original volume
-                isMuted = false;
-            } else {
-                originalVolume = audio.volume; // Save current volume
-                audio.volume = 0; // Mute
-                isMuted = true;
-            }
-            volumeProgress.style.width = `${audio.volume * 100}%`;
-            updateVolumeIcon();
-        }
-
-        // Toggle Shuffle functionality (basic placeholder)
-        function toggleShuffle() {
-            isShuffling = !isShuffling;
-            shuffleBtn.classList.toggle('active', isShuffling); // Add 'active' class for visual feedback
-            shuffleBtn.style.color = isShuffling ? '#1db954' : 'white'; // Change color
-            // TODO: Implement actual shuffling logic for the song order
-            console.log('Shuffle toggled:', isShuffling);
-            if (isShuffling) {
-                // If you want to shuffle the current playlist:
-                // const shuffledSongs = [...songs].sort(() => Math.random() - 0.5);
-                // Then manage playback from shuffledSongs
-            }
-        }
-
-        // Toggle Repeat functionality
-        function toggleRepeat() {
-            if (repeatMode === 'none') {
-                repeatMode = 'all';
-                repeatBtn.innerHTML = '<i class="fas fa-redo"></i>'; // Icon for repeat all
-                repeatBtn.style.color = '#1db954';
-                repeatBtn.classList.add('active');
-            } else if (repeatMode === 'all') {
-                repeatMode = 'one';
-                repeatBtn.innerHTML = '<i class="fas fa-redo-alt"></i>'; // Icon for repeat one
-                repeatBtn.style.color = '#1db954';
-            } else { // repeatMode === 'one'
-                repeatMode = 'none';
-                repeatBtn.innerHTML = '<i class="fas fa-redo"></i>'; // Back to original icon
-                repeatBtn.style.color = 'white';
-                repeatBtn.classList.remove('active');
-            }
-            console.log('Repeat mode:', repeatMode);
-        }
-
-        // Initialize the player when the DOM is fully loaded
-        document.addEventListener('DOMContentLoaded', initPlayer);
+        // Initial setup
+        document.addEventListener('DOMContentLoaded', () => {
+            renderSongsList();
+            loadSong(currentSongIndex); // Load the first song, but don't autoplay
+        });
     </script>
 </body>
 </html>
-```
