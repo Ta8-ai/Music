@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="player">
+        <div class="player__header">
+            <div class="player__img player__img--absolute">
+                <img class="player__img-song" src="https://i.scdn.co/image/ab67616d0000b273d6a461b4b3c9a0b0b8d3b1e3" alt="song-img">
+            </div>
+            <div class="player__content">
+                <h2 class="player__title">Song Title</h2>
+                <p class="player__artist">Artist</p>
+            </div>
+        </div>
+
+        <div class="player__controls">
+            <div class="player__btn player__btn--prev">
+                <i class="fas fa-prev"></i>
+            </div>
+            <div class="player__btn player__btn--play">
+                <i class="fas fa-play"></i>
+            </div>
+            <div class="player__btn player__btn--next">
+                <i class="fas fa-next"></i>
+            </div>
+        </div>
+
+        <div class="player__progress">
+            <div class="progress__bar">
+                <div class="progress__bar-fill"></div>
+            </div>
+            <div class="progress__time">
+                <span class="progress__time-current">0:00</span>
+                <span class="progress__time-duration">0:00</span>
+            </div>
+        </div>
+
+        <div class="player__volume">
+            <div class="player__btn player__btn--volume">
+                <i class="fas fa-volume-up"></i>
+            </div>
+            <div class="volume__bar">
+                <div class="volume__bar-fill"></div>
+            </div>
+        </div>
+        <audio class="player__audio" controls>
+            <source src="" type="audio/mpeg">
+        </audio>
+    </div>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
